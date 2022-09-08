@@ -16,6 +16,7 @@ class pars:
         self.gambar = "media\\"+a["picture"]
         self.photo = "media\\"+a["photo"]
         self.pin = "media\\"+a["pin"]
+        self.hide = a["hide"]
         self.radius = int(self.size * 3 / 8)
         self.center = (int(self.size / 2), int(self.size / 2))
 
@@ -87,13 +88,19 @@ class pars:
 
         minute_x = center[0] + (radius - 20) * mt.cos(minute_ang * mt.pi / 180)
         minute_y = center[1] + (radius - 20) * mt.sin(minute_ang * mt.pi / 180)
-        cv.line(background, center, (int(minute_x), int(minute_y)), color2, 10)
-        cv.line(background, center, (int(minute_x), int(minute_y)), color, 2)
+        minute_x2 = center[0] + (radius - 10) * \
+            mt.cos(minute_ang * mt.pi / 180)
+        minute_y2 = center[1] + (radius - 10) * \
+            mt.sin(minute_ang * mt.pi / 180)
+        cv.line(background, center, (int(minute_x2), int(minute_y2)), color2, 10)
+        cv.line(background, center, (int(minute_x), int(minute_y)), color, 7)
 
         hour_x = center[0] + (radius - 50) * mt.cos(hour_ang * mt.pi / 180)
         hour_y = center[1] + (radius - 50) * mt.sin(hour_ang * mt.pi / 180)
-        cv.line(background, center, (int(hour_x), int(hour_y)), color2, 15)
-        cv.line(background, center, (int(hour_x), int(hour_y)), color, 5)
+        hour_x2 = center[0] + (radius - 40) * mt.cos(hour_ang * mt.pi / 180)
+        hour_y2 = center[1] + (radius - 40) * mt.sin(hour_ang * mt.pi / 180)
+        cv.line(background, center, (int(hour_x2), int(hour_y2)), color2, 15)
+        cv.line(background, center, (int(hour_x), int(hour_y)), color, 12)
 
         return background
 
@@ -117,6 +124,8 @@ class watch(Tk):
 
     def test(self):
         par = pars()
+        if par.hide == "true":
+            return par.picture(par.picture(par.draw_time(par.bg), par.pict, 0.45), par.logo, 0.1)
         return par.picture(par.draw_time(par.picture(par.bg, par.pict, 0.45)), par.logo, 0.1)
 
     def update(self):
