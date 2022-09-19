@@ -131,6 +131,5 @@ class watch(Tk):
         self.label1.after(1000, self.update)
 
 
-if __name__ == "__main__":
-    ws = watch()
-    ws.mainloop()
+ws = watch()
+ws.mainloop()
