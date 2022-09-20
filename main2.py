@@ -1,8 +1,8 @@
-from asyncore import loop
 from tkinter import Tk, Label
 import math as mt
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk, ImageDraw, ImageFont
 from datetime import datetime as dt
+from convert_numbers import english_to_hindi as arab
 
 
 class normal():
@@ -16,6 +16,7 @@ class normal():
             f"media3//j{i+1}.png").resize((size, size)) for i in range(12)]
         self.bg = Image.open("media3//bg.png").resize((size, size))
         self.bgj = Image.open("media3//full_hour.png").resize((size, size))
+        self.font = ImageFont.truetype("media3//afont.ttf", 50)
 
     def draw_hour(self, bg):
         now = dt.now().time()
@@ -38,6 +39,16 @@ class normal():
         else:
             return bg
 
+    def draw_text(self, bg):
+        now = dt.now().time()
+        minutes = arab(str(now.minute))
+        hour = arab(str(now.hour))
+        seconds = arab(str(now.second))
+        text = hour + ":" + minutes + ":"+seconds
+        n = ImageDraw.Draw(bg)
+        n.text((80, 50), text=text, font=self.font, fill=(0, 0, 0))
+        return bg
+
 
 class kinter(Tk):
     def __init__(self, norm):
@@ -50,11 +61,11 @@ class kinter(Tk):
         self.label1.pack()
         self.norm = norm
 
-    def loop(self):
-        return self.norm.draw_hour(self.norm.draw_sec(self.norm.draw_minute(self.norm.bg)))
+    def looping(self):
+        return self.norm.draw_text(self.norm.draw_hour(self.norm.draw_sec(self.norm.draw_minute(self.norm.bg))))
 
     def passm(self):
-        image = ImageTk.PhotoImage(self.loop())
+        image = ImageTk.PhotoImage(self.looping())
         self.label1.image = image
         self.label1.configure(image=image)
         self.label1.after(1000, self.passm)
