@@ -6,7 +6,7 @@ from convert_numbers import english_to_hindi as arab
 
 
 class normal():
-    def __init__(self, size):
+    def __init__(self, size: int):
         self.size = size
         self.det = [Image.open(
             f"media3//d{i+1}.png").resize((size, size)) for i in range(60) if (i+1) % 5 != 0]
@@ -16,7 +16,7 @@ class normal():
             f"media3//j{i+1}.png").resize((size, size)) for i in range(12)]
         self.bg = Image.open("media3//bg.png").resize((size, size))
         self.bgj = Image.open("media3//full_hour.png").resize((size, size))
-        self.font = ImageFont.truetype("media3//afont.ttf", 50)
+        self.font = ImageFont.truetype("media3//afont.ttf", int(size/8))
 
     def draw_hour(self, bg):
         now = dt.now().time()
@@ -46,12 +46,13 @@ class normal():
         seconds = arab(str(now.second))
         text = hour + ":" + minutes + ":"+seconds
         n = ImageDraw.Draw(bg)
-        n.text((80, 50), text=text, font=self.font, fill=(0, 0, 0))
+        n.text((int(self.size/5), int(self.size/8)),
+               text=text, font=self.font, fill=(0, 0, 0))
         return bg
 
 
 class kinter(Tk):
-    def __init__(self, norm):
+    def __init__(self, norm: classmethod):
         super().__init__()
         self.title('Jam menara Masjid')
         self.resizable(0, 0)
@@ -60,6 +61,7 @@ class kinter(Tk):
         self.label1 = Label(self)
         self.label1.pack()
         self.norm = norm
+        self.passm()
 
     def looping(self):
         return self.norm.draw_text(self.norm.draw_hour(self.norm.draw_sec(self.norm.draw_minute(self.norm.bg))))
@@ -72,8 +74,5 @@ class kinter(Tk):
 
 
 if __name__ == '__main__':
-    norm = normal(400)
-    tkin = kinter(norm)
-    # norm.draw_hour(norm.draw_minute(norm.draw_sec(norm.bg))).show()
-    tkin.passm()
+    tkin = kinter(normal(400))
     tkin.mainloop()
